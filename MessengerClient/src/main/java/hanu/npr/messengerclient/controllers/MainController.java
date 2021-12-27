@@ -135,7 +135,7 @@ public class MainController {
         switch (type) {
             case ChatMessageDTO.TYPE: {
                 ChatMessageDTO msg = objectMapper.readValue(jsonPayload, ChatMessageDTO.class);
-                callback.onChatMessageReceived(msg.getConversationId(), msg.getSenderUsername(), msg.getContent());
+                callback.onChatMessageReceived(msg.getConversationId(), msg.getSenderUsername(), msg.getContent(), msg.getAttachment());
                 break;
             }
             case NewUserJoinedDTO.TYPE: {
@@ -199,7 +199,7 @@ public class MainController {
 
         void onConnectionSuccess(String host, int port);
 
-        void onChatMessageReceived(Long conversationId, String senderUsername, String content);
+        void onChatMessageReceived(Long conversationId, String senderUsername, String content, Attachment attachment);
 
         void onNewUserJoined(String username, String fullName);
 

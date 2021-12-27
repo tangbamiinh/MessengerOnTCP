@@ -223,7 +223,7 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
 
     @SneakyThrows
     @Override
-    public void onChatMessageReceived(Long conversationId, String senderUsername, String content) {
+    public void onChatMessageReceived(Long conversationId, String senderUsername, String content, Attachment attachment) {
         Conversation conversation = conversations.stream()
                 .filter(c -> Objects.equals(c.getId(), conversationId))
                 .findFirst()
@@ -231,6 +231,7 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
 
 
         ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setAttachment(attachment);
         chatMessage.setMyMessage(mainController.getCurrentUser().getUsername().equals(senderUsername));
         chatMessage.setContent(content);
 
