@@ -4,17 +4,18 @@ import hanu.npr.messengerserver.controllers.ServerController;
 import hanu.npr.messengerserver.models.User;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MessengerServerCLIApplication implements ServerController.Interface {
-    
-    private final ServerController serverController;
 
     public MessengerServerCLIApplication() throws IOException {
-        serverController = new ServerController(60000, this);
+        new ServerController(60000, this);
     }
 
     public static void main(String[] args) throws IOException {
-        MessengerServerCLIApplication messengerServerCLIApplication = new MessengerServerCLIApplication();
+        System.setProperty("javax.net.ssl.keyStore", Objects.requireNonNull(MessengerServerCLIApplication.class.getResource("SSLStore")).getPath());
+        System.setProperty("javax.net.ssl.keyStorePassword", "MessengerOnTCP");
+        new MessengerServerCLIApplication();
     }
 
     @Override

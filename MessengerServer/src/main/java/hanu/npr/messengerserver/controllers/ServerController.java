@@ -16,6 +16,9 @@ import hanu.npr.messengerserver.repositories.*;
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -51,6 +54,8 @@ public class ServerController {
 
     private final InitData initData;
 
+    private final SSLServerSocket serverSocket;
+
     final Interface callback;
 
     public ServerController(int port, Interface callback) throws IOException {
@@ -59,14 +64,16 @@ public class ServerController {
         //! Initialize data
         initData = new InitData();
 
-        ServerSocket serverSocket = new ServerSocket(port);
+        SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        serverSocket = (SSLServerSocket) factory.createServerSocket(port);
+
         callback.onPortOpened(port);
 
         new Thread(() -> {
             while (true) {
-                Socket socket = null;
+                SSLSocket socket = null;
                 try {
-                    socket = serverSocket.accept();
+                    socket = (SSLSocket) serverSocket.accept();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

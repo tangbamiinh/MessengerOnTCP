@@ -15,6 +15,8 @@ public class MessengerClientApplication extends Application {
     private static Stage primaryStage;
 
     public static void main(String[] args) {
+        System.setProperty("javax.net.ssl.trustStore", Objects.requireNonNull(MessengerClientApplication.class.getResource("SSLStore")).getPath());
+        System.setProperty("javax.net.ssl.trustStorePassword", "MessengerOnTCP");
         launch(args);
     }
 

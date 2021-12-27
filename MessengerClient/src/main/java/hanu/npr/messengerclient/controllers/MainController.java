@@ -9,10 +9,22 @@ import hanu.npr.messengerclient.models.Attachment;
 import hanu.npr.messengerclient.models.GroupConversation;
 import hanu.npr.messengerclient.models.PrivateConversation;
 import hanu.npr.messengerclient.models.User;
-import hanu.npr.messengerclient.models.dtos.*;
+import hanu.npr.messengerclient.models.dtos.BaseDTO;
+import hanu.npr.messengerclient.models.dtos.ChatMessageDTO;
+import hanu.npr.messengerclient.models.dtos.DownloadAttachmentRequestDTO;
+import hanu.npr.messengerclient.models.dtos.DownloadAttachmentResponseDTO;
+import hanu.npr.messengerclient.models.dtos.ErrorDTO;
+import hanu.npr.messengerclient.models.dtos.InitialDataDTO;
+import hanu.npr.messengerclient.models.dtos.LoggedInUserDTO;
+import hanu.npr.messengerclient.models.dtos.LoginDTO;
+import hanu.npr.messengerclient.models.dtos.NewUserJoinedDTO;
+import hanu.npr.messengerclient.models.dtos.PrivateConversationDTO;
+import hanu.npr.messengerclient.models.dtos.RegistrationDTO;
+import hanu.npr.messengerclient.models.dtos.SuccessDTO;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +59,9 @@ public class MainController {
     private User currentUser;
 
     public MainController(String host, int port, Interface callback) throws IOException {
-        socket = new Socket(host, port);
+        SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        socket = factory.createSocket(host, port);
+
         this.callback = callback;
 
         input = socket.getInputStream();
