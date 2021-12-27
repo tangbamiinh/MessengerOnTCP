@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXButton?>
+
+<?import javafx.scene.control.TextField?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           styleClass="root"
+           fx:id="root"
+           fx:controller="hanu.npr.messengerclient.fxViews.Main">
+    <HBox>
+        <VBox>
+            <padding>
+                <Insets>
+                    <top>20</top>
+                    <left>20</left>
+                    <right>20</right>
+                </Insets>
+            </padding>
+            <HBox>
+                <Label text="Chats" style="-fx-font-size: 24px"/>
+                <Pane HBox.hgrow="ALWAYS" />
+                <JFXButton fx:id="addConversationButton">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-plus-circle" iconSize="24" iconColor="dodgerblue"/>
+                    </graphic>
+                </JFXButton>
+            </HBox>
+            <Pane prefHeight="12" />
+            <JFXListView fx:id="chatHeadsListView" minWidth="200" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" onMouseClicked="#handleChatHeadClicked"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets>
+                    <top>10</top>
+                </Insets>
+            </padding>
+            <HBox HBox.hgrow="ALWAYS">
+                <VBox>
+                    <Label styleClass="conversation-name" text="Select a conversation" fx:id="conversationLabel">
+                        <VBox.margin>
+                            <Insets>
+                                <bottom>5</bottom>
+                            </Insets>
+                        </VBox.margin>
+                    </Label>
+                </VBox>
+            </HBox>
+            <Pane prefHeight="10"/>
+            <HBox VBox.vgrow="ALWAYS">
+                <JFXListView fx:id="chatMessagesListView" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" minWidth="400"/>
+                <Pane prefWidth="10" />
+            </HBox>
+            <Pane prefHeight="5"/>
+            <HBox alignment="CENTER">
+                <JFXButton fx:id="selectAttachmentButton">
+                    <graphic>
+                        <FontIcon iconLiteral="far-file-alt" iconSize="24" iconColor="dodgerblue"/>
+                    </graphic>
+                </JFXButton>
+                <TextField fx:id="messageBox" styleClass="text-field" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" promptText="Send a message..." />
+                <JFXButton fx:id="sendMessageButton">
+                    <graphic>
+                        <FontIcon iconLiteral="far-envelope" iconSize="24" iconColor="dodgerblue"/>
+                    </graphic>
+                </JFXButton>
+            </HBox>
+            <Pane prefHeight="5"/>
+        </VBox>
+    </HBox>
+</StackPane>

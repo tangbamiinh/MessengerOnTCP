@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<JFXDialogLayout xmlns="http://javafx.com/javafx"
+                 xmlns:fx="http://javafx.com/fxml">
+    <heading>
+        <Label>Success</Label>
+    </heading>
+    <body>
+        <VBox spacing="20">
+            <VBox.margin>
+                <Insets>
+                    <top>40</top>
+                    <bottom>10</bottom>
+                </Insets>
+            </VBox.margin>
+            <Label fx:id="successMessageLabel" text="Success"></Label>
+        </VBox>
+    </body>
+    <actions>
+        <JFXButton fx:id="okButton" styleClass="dialog-accept">OK
+        </JFXButton>
+    </actions>
+</JFXDialogLayout>

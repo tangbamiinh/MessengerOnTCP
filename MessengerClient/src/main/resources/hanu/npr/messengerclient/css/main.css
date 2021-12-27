@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/Lato-Regular.ttf');
+}
+
+.label {
+    -fx-font-family: 'Lato';
+    -fx-font-size: 20;
+    /*-fx-text-fill: white;*/
+}
+
+.text {
+    -fx-font-family: 'Lato';
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-background-color : white;
+}
+
+.conversation-name {
+    -fx-font-size: 16;
+    -fx-text-fill: #4059a9;
+}
+
+.chat-message-sender {
+    -fx-font-size: 13;
+    -fx-text-fill: #4059a9;
+}
+
+.latest-message {
+    -fx-font-size: 14;
+    /*-fx-text-fill: #aaaaaa;*/
+}
+
+.active-ago {
+    -fx-font-size: 14;
+    /*-fx-text-fill: #aaaaaa;*/
+}
+
+.message {
+    -fx-font-size: 15;
+}
+
+.text-field {
+    /*-fx-background-color: white;*/
+    /*!*-fx-text-fill: #ffffff;*!*/
+    /*-fx-text-box-border: #ffffff;*/
+    /*-fx-focus-color: #ffffff;*/
+
+    /*-fx-control-inner-background: #ffffff ;*/
+    /*-fx-faint-focus-color: #ffffff ;*/
+}
+
+.dialog-accept {
+    -fx-text-fill: #4059a9;
+    -fx-font-weight: BOLD;
+    -fx-padding: 0.7em 0.8em;
+}
+
+.jfx-dialog-overlay-pane {
+    -fx-background-color: rgba(0.0, 0.0, 0.0, 0.1);
+}

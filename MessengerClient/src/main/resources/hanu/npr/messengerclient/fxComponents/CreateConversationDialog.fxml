@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXListView?>
+<JFXDialogLayout xmlns="http://javafx.com/javafx"
+                 xmlns:fx="http://javafx.com/fxml">
+    <heading>
+        <Label>Connect with a user</Label>
+    </heading>
+    <body>
+        <VBox spacing="20">
+            <VBox.margin>
+                <Insets>
+                    <top>40</top>
+                    <bottom>10</bottom>
+                </Insets>
+            </VBox.margin>
+            <JFXListView fx:id="usersListView" minWidth="150" maxHeight="200" />
+        </VBox>
+    </body>
+</JFXDialogLayout>

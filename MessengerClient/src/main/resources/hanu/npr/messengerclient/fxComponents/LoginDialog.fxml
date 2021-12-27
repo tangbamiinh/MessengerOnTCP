@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.validation.RequiredFieldValidator?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<JFXDialogLayout xmlns="http://javafx.com/javafx"
+                 xmlns:fx="http://javafx.com/fxml">
+    <heading>
+        <Label>Login</Label>
+    </heading>
+    <body>
+        <VBox spacing="20">
+            <VBox.margin>
+                <Insets>
+                    <top>40</top>
+                    <bottom>10</bottom>
+                </Insets>
+            </VBox.margin>
+            <JFXTextField fx:id="usernameField" id="validatedText" promptText="Username" labelFloat="true">
+                <validators>
+                    <RequiredFieldValidator message="Input Required!">
+                        <FontIcon iconLiteral="fas-exclamation-triangle"/>
+                    </RequiredFieldValidator>
+                </validators>
+            </JFXTextField>
+            <JFXPasswordField fx:id="passwordField" id="validatedPassword" promptText="Password"
+                              labelFloat="true">
+                <validators>
+                    <RequiredFieldValidator message="Input Required!">
+                        <FontIcon iconLiteral="fas-exclamation-triangle"/>
+                    </RequiredFieldValidator>
+                </validators>
+            </JFXPasswordField>
+        </VBox>
+    </body>
+    <actions>
+        <JFXButton fx:id="loginButton" styleClass="dialog-accept">Login
+        </JFXButton>
+        <JFXButton fx:id="registerButton" styleClass="dialog-accept">Register
+        </JFXButton>
+    </actions>
+</JFXDialogLayout>
