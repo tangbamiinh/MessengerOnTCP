@@ -12,11 +12,7 @@ import hanu.npr.messengerclient.fxComponents.LoginDialog;
 import hanu.npr.messengerclient.fxComponents.MessageCell;
 import hanu.npr.messengerclient.fxComponents.SignUpDialog;
 import hanu.npr.messengerclient.fxComponents.SuccessDialog;
-import hanu.npr.messengerclient.models.ChatMessage;
-import hanu.npr.messengerclient.models.Conversation;
-import hanu.npr.messengerclient.models.GroupConversation;
-import hanu.npr.messengerclient.models.PrivateConversation;
-import hanu.npr.messengerclient.models.User;
+import hanu.npr.messengerclient.models.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -28,11 +24,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
 import java.util.Collection;
@@ -125,6 +124,7 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
         }
 
         mainController.sendMessage(currentConversation.getId(), messageBox.getText(), selectedFile);
+        selectedFile = null;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
             }
         });
 
-        chatMessagesListView.setCellFactory(chatMessageListView -> new MessageCell());
+        chatMessagesListView.setCellFactory(chatMessageListView -> new MessageCell(this));
 
         messageBox.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -181,7 +181,7 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
             messageBox.clear();
         });
 
-        selectAttachmentButton.setOnAction(event -> selectedFile = fileChooser.showOpenDialog(MessengerClientApplication.getStage()));
+        selectAttachmentButton.setOnAction(event -> selectFile());
 
         addConversationButton.setOnAction(event -> {
             List<User> users = userMap
@@ -197,6 +197,13 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
 
         // Show login dialog
         loginDialog.show();
+    }
+
+    private void selectFile() {
+        fileChooser.setTitle("Select a file to send");
+        selectedFile = fileChooser.showOpenDialog(MessengerClientApplication.getStage());
+        if (selectedFile != null)
+            messageBox.setText("Send " + selectedFile.getName());
     }
 
     @Override
@@ -336,6 +343,24 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
     }
 
     @Override
+    public void onAttachmentDownloaded(Attachment attachment) {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle("Select destination folder");
+        Platform.runLater(() -> {
+            File chosenDir = dirChooser.showDialog(MessengerClientApplication.getStage());
+            if (chosenDir != null) {
+                try {
+                    FileUtils.writeByteArrayToFile(new File(chosenDir.getAbsolutePath() + "/" + attachment.getFileName()), attachment.getFile());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                successDialog.setSuccessMessage("Successfully downloaded " + attachment.getFileName() + " to " + chosenDir.getAbsolutePath());
+                Platform.runLater(successDialog::show);
+            }
+        });
+    }
+
+    @Override
     public void onSignUpSubmitted(String fullName, String username, String password) {
         mainController.signup(fullName, username, password);
     }
@@ -362,5 +387,10 @@ public class Main implements Initializable, LoginDialog.Interface, SignUpDialog.
     @Override
     public void onConnectToUser(User user) {
         mainController.createPrivateChatWith(user.getUsername());
+    }
+
+    @Override
+    public void downloadAttachment(Attachment attachment) {
+        mainController.downloadAttachment(attachment);
     }
 }

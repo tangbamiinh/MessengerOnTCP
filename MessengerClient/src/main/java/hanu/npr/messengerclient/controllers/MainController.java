@@ -9,16 +9,7 @@ import hanu.npr.messengerclient.models.Attachment;
 import hanu.npr.messengerclient.models.GroupConversation;
 import hanu.npr.messengerclient.models.PrivateConversation;
 import hanu.npr.messengerclient.models.User;
-import hanu.npr.messengerclient.models.dtos.BaseDTO;
-import hanu.npr.messengerclient.models.dtos.ChatMessageDTO;
-import hanu.npr.messengerclient.models.dtos.ErrorDTO;
-import hanu.npr.messengerclient.models.dtos.InitialDataDTO;
-import hanu.npr.messengerclient.models.dtos.LoggedInUserDTO;
-import hanu.npr.messengerclient.models.dtos.LoginDTO;
-import hanu.npr.messengerclient.models.dtos.NewUserJoinedDTO;
-import hanu.npr.messengerclient.models.dtos.PrivateConversationDTO;
-import hanu.npr.messengerclient.models.dtos.RegistrationDTO;
-import hanu.npr.messengerclient.models.dtos.SuccessDTO;
+import hanu.npr.messengerclient.models.dtos.*;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 
@@ -119,7 +110,6 @@ public class MainController {
             attachment = new Attachment();
             attachment.setFileName(file.getName());
             attachment.setFile(FileUtils.readFileToByteArray(file));
-
         }
         ChatMessageDTO chatMessageDTO = new ChatMessageDTO(null, conversationId, currentUser.getUsername(), content, attachment);
         sendDTO(chatMessageDTO);
@@ -191,7 +181,18 @@ public class MainController {
                 callback.onPrivateConversationReceived(data.getId(), username, fullName);
                 break;
             }
+            case DownloadAttachmentResponseDTO.TYPE: {
+                DownloadAttachmentResponseDTO data = objectMapper.readValue(jsonPayload, DownloadAttachmentResponseDTO.class);
+                callback.onAttachmentDownloaded(data.getAttachment());
+                break;
+            }
         }
+    }
+
+    public void downloadAttachment(Attachment attachment) {
+        DownloadAttachmentRequestDTO downloadAttachmentRequestDTO = new DownloadAttachmentRequestDTO();
+        downloadAttachmentRequestDTO.setAttachmentId(attachment.getId());
+        sendDTO(downloadAttachmentRequestDTO);
     }
 
     public interface Interface {
@@ -213,5 +214,7 @@ public class MainController {
         void onServerShutdown();
 
         void onPrivateConversationReceived(Long conversationId, String username, String fullName);
+
+        void onAttachmentDownloaded(Attachment attachment);
     }
 }

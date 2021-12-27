@@ -5,26 +5,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hanu.npr.messengerserver.config.InitData;
+import hanu.npr.messengerserver.models.Attachment;
 import hanu.npr.messengerserver.models.ChatMessage;
 import hanu.npr.messengerserver.models.Conversation;
 import hanu.npr.messengerserver.models.GroupConversation;
 import hanu.npr.messengerserver.models.PrivateConversation;
 import hanu.npr.messengerserver.models.User;
-import hanu.npr.messengerserver.models.dtos.BaseDTO;
-import hanu.npr.messengerserver.models.dtos.ChatMessageDTO;
-import hanu.npr.messengerserver.models.dtos.ErrorDTO;
-import hanu.npr.messengerserver.models.dtos.InitialDataDTO;
-import hanu.npr.messengerserver.models.dtos.LoggedInUserDTO;
-import hanu.npr.messengerserver.models.dtos.LoginDTO;
-import hanu.npr.messengerserver.models.dtos.NewUserJoinedDTO;
-import hanu.npr.messengerserver.models.dtos.PrivateConversationDTO;
-import hanu.npr.messengerserver.models.dtos.RegistrationDTO;
-import hanu.npr.messengerserver.repositories.ChatMessageRepository;
-import hanu.npr.messengerserver.repositories.ConversationRepository;
-import hanu.npr.messengerserver.repositories.GroupConversationRepository;
-import hanu.npr.messengerserver.repositories.PrivateConversationRepository;
-import hanu.npr.messengerserver.repositories.UserRepository;
+import hanu.npr.messengerserver.models.dtos.*;
+import hanu.npr.messengerserver.repositories.*;
 import lombok.SneakyThrows;
+import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -39,6 +29,8 @@ public class ServerController {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private static final Tika tika = new Tika();
+
     static {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
@@ -52,6 +44,8 @@ public class ServerController {
     private final PrivateConversationRepository privateConversationRepository = new PrivateConversationRepository();
 
     private final GroupConversationRepository groupConversationRepository = new GroupConversationRepository();
+
+    private final AttachmentRepository attachmentRepository = new AttachmentRepository();
 
     private final UserRepository userRepository = new UserRepository();
 
@@ -143,10 +137,13 @@ public class ServerController {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setContent(chatMessageDTO.getContent());
 
-        if (chatMessageDTO.getAttachment() != null) {
-            chatMessage.getAttachment().setId(null);
+        Attachment attachment = chatMessageDTO.getAttachment();
+        if (attachment != null) {
+            attachment.setId(null);
+            String fileType = tika.detect(attachment.getFile());
+            attachment.setFileType(fileType);
+            chatMessage.setAttachment(attachment);
         }
-
         return chatMessage;
     }
 
@@ -313,6 +310,13 @@ public class ServerController {
 
         sendToUser(username1, privateConversationDTO);
         sendToUser(username2, privateConversationDTO);
+    }
+
+    public void sendAttachmentToUser(Long attachmentId, UserSessionThread userSessionThread) {
+        Attachment attachment = attachmentRepository.getById(attachmentId);
+        DownloadAttachmentResponseDTO downloadAttachmentResponseDTO = new DownloadAttachmentResponseDTO();
+        downloadAttachmentResponseDTO.setAttachment(attachment);
+        sendToUser(userSessionThread.getUser().getUsername(), downloadAttachmentResponseDTO);
     }
 
     public interface Interface {

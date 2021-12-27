@@ -20,7 +20,7 @@
 
 .conversation-name {
     -fx-font-size: 16;
-    -fx-text-fill: #4059a9;
+    -fx-text-fill: orange;
 }
 
 .chat-message-sender {

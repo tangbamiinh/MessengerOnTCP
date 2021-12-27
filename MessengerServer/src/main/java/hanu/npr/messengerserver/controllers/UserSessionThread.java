@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hanu.npr.messengerserver.models.User;
-import hanu.npr.messengerserver.models.dtos.ChatMessageDTO;
-import hanu.npr.messengerserver.models.dtos.LoginDTO;
-import hanu.npr.messengerserver.models.dtos.PrivateConversationDTO;
-import hanu.npr.messengerserver.models.dtos.RegistrationDTO;
+import hanu.npr.messengerserver.models.dtos.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,6 +99,10 @@ public class UserSessionThread extends Thread {
                     // Do not trust username1 sent by client
                     privateConversationDTO.setUsername1(user.getUsername());
                     server.createPrivateConversation(privateConversationDTO.getUsername1(), privateConversationDTO.getUsername2());
+                    break;
+                case DownloadAttachmentRequestDTO.TYPE:
+                    DownloadAttachmentRequestDTO downloadAttachmentRequestDTO = objectMapper.readValue(payload, DownloadAttachmentRequestDTO.class);
+                    server.sendAttachmentToUser(downloadAttachmentRequestDTO.getAttachmentId(), this);
                     break;
             }
 

@@ -42,24 +42,24 @@ public class Attachment {
 
     @Lob
     @Column(name = "file", columnDefinition="BLOB")
-    @JsonSerialize(using = FileToBase64Serializer.class, as = String.class)
-    @JsonDeserialize(using = Base64ToFileDeserializer.class)
+//    @JsonSerialize(using = FileToBase64Serializer.class, as = String.class)
+//    @JsonDeserialize(using = Base64ToFileDeserializer.class)
     private byte[] file;
 }
 
-class FileToBase64Serializer extends JsonSerializer<byte[]> {
-    @Override
-    public void serialize(byte[] fileContent,
-                          JsonGenerator jsonGenerator,
-                          SerializerProvider serializerProvider)
-            throws IOException {
-        jsonGenerator.writeObject(Base64.getEncoder().encodeToString(fileContent));
-    }
-}
-
-class Base64ToFileDeserializer extends JsonDeserializer<String> {
-    @Override
-    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
-        return null;
-    }
-}
+//class FileToBase64Serializer extends JsonSerializer<byte[]> {
+//    @Override
+//    public void serialize(byte[] fileContent,
+//                          JsonGenerator jsonGenerator,
+//                          SerializerProvider serializerProvider)
+//            throws IOException {
+//        jsonGenerator.writeObject(Base64.getEncoder().encodeToString(fileContent));
+//    }
+//}
+//
+//class Base64ToFileDeserializer extends JsonDeserializer<String> {
+//    @Override
+//    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+//        return null;
+//    }
+//}
